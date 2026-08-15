@@ -2,526 +2,198 @@
 <html lang="de">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Fahrtenbuch & Beleg AI</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Team-Fahrtenbuch</title>
     <style>
-        :root {
-            --bg-color: #f4f6f9;
-            --card-bg: #ffffff;
-            --primary: #2563eb;
-            --primary-hover: #1d4ed8;
-            --success: #10b981;
-            --success-hover: #059669;
-            --text-main: #1f2937;
-            --text-muted: #6b7280;
-            --border: #e5e7eb;
-        }
-
-        @media (prefers-color-scheme: dark) {
-            :root {
-                --bg-color: #0f172a;
-                --card-bg: #1e293b;
-                --primary: #3b82f6;
-                --primary-hover: #2563eb;
-                --success: #10b981;
-                --success-hover: #059669;
-                --text-main: #f8fafc;
-                --text-muted: #94a3b8;
-                --border: #334155;
-            }
-        }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        body {
-            background-color: var(--bg-color);
-            color: var(--text-main);
-            padding: 16px;
-            padding-bottom: 40px;
-        }
-
-        .container {
-            max-width: 500px;
-            margin: 0 auto;
-        }
-
-        h1 {
-            font-size: 24px;
-            font-weight: 700;
-            margin-bottom: 20px;
-            text-align: center;
-        }
-
-        .card {
-            background: var(--card-bg);
-            border-radius: 16px;
-            padding: 20px;
-            margin-bottom: 16px;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-            border: 1px solid var(--border);
-        }
-
-        .card-title {
-            font-size: 18px;
-            font-weight: 600;
-            margin-bottom: 16px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .stats-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 12px;
-            margin-bottom: 16px;
-        }
-
-        .stat-box {
-            background: var(--bg-color);
-            padding: 12px;
-            border-radius: 12px;
-            text-align: center;
-        }
-
-        .stat-val {
-            font-size: 20px;
-            font-weight: 700;
-            color: var(--primary);
-        }
-
-        .stat-lbl {
-            font-size: 12px;
-            color: var(--text-muted);
-            margin-top: 4px;
-        }
-
-        .input-group {
-            margin-bottom: 12px;
-        }
-
-        label {
-            display: block;
-            font-size: 14px;
-            font-weight: 500;
-            margin-bottom: 6px;
-            color: var(--text-muted);
-        }
-
-        input[type="text"] {
-            width: 100%;
-            padding: 12px;
-            border-radius: 8px;
-            border: 1px solid var(--border);
-            background: var(--bg-color);
-            color: var(--text-main);
-            font-size: 16px;
-            outline: none;
-        }
-
-        input[type="text"]:focus {
-            border-color: var(--primary);
-        }
-
-        button {
-            width: 100%;
-            padding: 14px;
-            border-radius: 12px;
-            border: none;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background 0.2s;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .btn-primary {
-            background: var(--primary);
-            color: white;
-        }
-
-        .btn-primary:hover {
-            background: var(--primary-hover);
-        }
-
-        .btn-success {
-            background: var(--success);
-            color: white;
-        }
-
-        .btn-success:hover {
-            background: var(--success-hover);
-        }
-
-        .btn-outline {
-            background: transparent;
-            border: 1px solid var(--border);
-            color: var(--text-main);
-            padding: 10px;
-            font-size: 14px;
-        }
-
-        .btn-tracking {
-            background: #ef4444;
-            color: white;
-        }
-
-        .btn-tracking:hover {
-            background: #dc2626;
-        }
-
-        .export-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 8px;
-            margin-top: 8px;
-        }
-
-        .list-item {
-            padding: 12px 0;
-            border-bottom: 1px solid var(--border);
-            font-size: 14px;
-        }
-
-        .list-item:last-child {
-            border-bottom: none;
-        }
-
-        .item-main {
-            display: flex;
-            justify-content: space-between;
-            font-weight: 600;
-            margin-bottom: 4px;
-        }
-
-        .item-sub {
-            color: var(--text-muted);
-            font-size: 12px;
-        }
-
-        .hidden {
-            display: none;
-        }
-
-        .camera-container {
-            border: 2px dashed var(--border);
-            border-radius: 12px;
-            padding: 20px;
-            text-align: center;
-            cursor: pointer;
-            margin-bottom: 12px;
-            background: var(--bg-color);
-        }
-
-        .camera-container:hover {
-            border-color: var(--primary);
-        }
-
-        .ocr-result {
-            background: var(--bg-color);
-            padding: 12px;
-            border-radius: 8px;
-            margin-top: 12px;
-            font-size: 13px;
-        }
-
-        .badge {
-            background: var(--border);
-            padding: 2px 6px;
-            border-radius: 4px;
-            font-size: 11px;
-            font-weight: normal;
-        }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background-color: #f3f4f6; margin: 0; padding: 20px; color: #1f2937; }
+        .card { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); margin-bottom: 20px; }
+        h1 { text-align: center; font-size: 24px; color: #1e3a8a; }
+        h2 { font-size: 18px; margin-top: 0; border-bottom: 2px solid #f3f4f6; padding-bottom: 8px; }
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px; }
+        .stat { background: #eff6ff; padding: 15px; border-radius: 8px; text-align: center; }
+        .stat-val { font-size: 22px; font-weight: bold; color: #2563eb; }
+        .stat-lbl { font-size: 12px; color: #6b7280; }
+        label { display: block; margin-bottom: 5px; font-weight: 500; font-size: 14px; }
+        input { width: 100%; padding: 10px; border: 1px solid #d1d5db; border-radius: 6px; box-sizing: border-box; margin-bottom: 15px; font-size: 16px; }
+        button { width: 100%; padding: 12px; border: none; border-radius: 6px; font-size: 16px; font-weight: bold; cursor: pointer; transition: background 0.2s; }
+        .btn-start { background-color: #2563eb; color: white; }
+        .btn-stop { background-color: #dc2626; color: white; }
+        .btn-csv { background-color: #10b981; color: white; margin-top: 10px; }
+        .log-list { list-style: none; padding: 0; margin: 0; max-height: 200px; overflow-y: auto; }
+        .log-item { padding: 10px; border-bottom: 1px solid #e5e7eb; font-size: 13px; display: flex; justify-content: space-between; }
     </style>
 </head>
 <body>
 
-<div class="container">
     <h1>🚗 Team-Fahrtenbuch</h1>
 
-    <!-- TRACKER -->
+    <!-- GPS TRACKER -->
     <div class="card">
-        <div class="card-title">📍 GPS-Fahrtenaufzeichnung</div>
-        <div class="stats-grid">
-            <div class="stat-box">
-                <div class="stat-val" id="live-km">0.00</div>
+        <h2>📍 GPS-Fahrtenaufzeichnung</h2>
+        <div class="grid">
+            <div class="stat">
+                <div class="stat-val" id="km-display">0.00</div>
                 <div class="stat-lbl">Gefahrene KM</div>
             </div>
-            <div class="stat-box">
-                <div class="stat-val" id="live-eur">0.00 €</div>
+            <div class="stat">
+                <div class="stat-val" id="eur-display">0.00 €</div>
                 <div class="stat-lbl">Erstattung (0,30€)</div>
             </div>
         </div>
 
-        <div class="input-group">
-            <label for="route-target">Ziel der Fahrt</label>
-            <input type="text" id="route-target" placeholder="z.B. Kunde Müller, Hamburg">
-        </div>
-        <div class="input-group">
-            <label for="route-purpose">Zweck der Fahrt</label>
-            <input type="text" id="route-purpose" placeholder="z.B. Projektabsprache">
-        </div>
+        <label for="ziel">Ziel der Fahrt *</label>
+        <input type="text" id="ziel" placeholder="z.B. Kunde Müller, Hamburg">
 
-        <button id="btn-toggle-tracking" class="btn-primary">Fahrt starten</button>
+        <label for="zweck">Zweck der Fahrt *</label>
+        <input type="text" id="zweck" placeholder="z.B. Projektabsprache">
+
+        <button id="track-btn" class="btn-start" onclick="toggleTracking()">Fahrt starten</button>
     </div>
 
-    <!-- BELEGE -->
+    <!-- EXPORT & HISTORIE -->
     <div class="card">
-        <div class="card-title">📸 KI Beleg-Scanner (MwSt.)</div>
+        <h2>📊 Daten-Export (CSV)</h2>
+        <button class="btn-csv" onclick="exportFahrten()">Fahrtenbuch herunterladen (.csv)</button>
         
-        <input type="file" id="file-input" accept="image/*" capture="environment" class="hidden">
-        <div class="camera-container" id="drop-zone">
-            <span style="font-size: 32px;">📷</span>
-            <p style="margin-top: 8px; font-weight: 500; font-size: 14px;">Foto aufnehmen oder hochladen</p>
-            <p style="font-size: 12px; color: var(--text-muted); margin-top: 4px;">AI extrahiert die MwSt. automatisch</p>
-        </div>
-
-        <div id="ocr-loading" class="ocr-result hidden" style="text-align: center; color: var(--primary);">
-            ⏳ KI analysiert den Beleg und berechnet die MwSt...
-        </div>
-
-        <div id="ocr-output" class="ocr-result hidden">
-            <div style="font-weight:600; margin-bottom: 6px; color: var(--success);">✔ KI Extraktion erfolgreich:</div>
-            <div id="ocr-details"></div>
-        </div>
+        <h3 style="font-size:14px; margin-top:20px;">Letzte Fahrten:</h3>
+        <ul id="fahrten-log" class="log-list"></ul>
     </div>
 
-    <!-- DATEN EXPORT & HISTORIE -->
-    <div class="card">
-        <div class="card-title">📊 Daten-Export (CSV)</div>
-        <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 12px;">Sichere deine Berichte direkt lokal als CSV-Datei.</p>
-        
-        <label>Fahrtenbuch CSV</label>
-        <div class="export-grid">
-            <button class="btn-outline" onclick="exportData('fahrten', 'tag')">📅 Täglich</button>
-            <button class="btn-outline" onclick="exportData('fahrten', 'monat')">🗓️ Monatlich</button>
-        </div>
+    <script>
+        let isTracking = false;
+        let watchId = null;
+        let totalDistance = 0; // in Kilometern
+        let lastPosition = null;
+        let fahrtenSpeicher = JSON.parse(localStorage.getItem('fahrten')) || [];
 
-        <label style="margin-top: 12px;">Belege & MwSt. CSV</label>
-        <div class="export-grid">
-            <button class="btn-outline" onclick="exportData('belege', 'tag')">📅 Täglich</button>
-            <button class="btn-outline" onclick="exportData('belege', 'monat')">🗓️ Monatlich</button>
-        </div>
-    </div>
-
-    <!-- HISTORIE LISTE -->
-    <div class="card">
-        <div class="card-title">📝 Letzte Aktivitäten</div>
-        <div id="history-list">
-            <p style="color: var(--text-muted); font-size: 14px; text-align: center; padding: 12px;">Noch keine Daten aufgezeichnet.</p>
-        </div>
-    </div>
-</div>
-
-<script>
-    // Lokaler Speicher initialisieren
-    let fahrten = JSON.parse(localStorage.getItem('team_fahrten')) || [];
-    let belege = JSON.parse(localStorage.getItem('team_belege')) || [];
-
-    let trackingInterval = null;
-    let isTracking = false;
-    let currentKm = 0.0;
-    
-    const liveKmEl = document.getElementById('live-km');
-    const liveEurEl = document.getElementById('live-eur');
-    const btnTracking = document.getElementById('btn-toggle-tracking');
-    const targetInput = document.getElementById('route-target');
-    const purposeInput = document.getElementById('route-purpose');
-    const historyList = document.getElementById('history-list');
-
-    // UI Updates
-    function updateHistoryUI() {
-        if (fahrten.length === 0 && belege.length === 0) {
-            historyList.innerHTML = `<p style="color: var(--text-muted); font-size: 14px; text-align: center; padding: 12px;">Noch keine Daten aufgezeichnet.</p>`;
-            return;
+        // Distanzberechnung zwischen zwei GPS-Punkten (Haversine-Formel)
+        function calculateDistance(lat1, lon1, lat2, lon2) {
+            const R = 6371; // Erdradius in km
+            const dLat = (lat2 - lat1) * Math.PI / 180;
+            const dLon = (lon2 - lon1) * Math.PI / 180;
+            const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+                      Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * 
+                      Math.sin(dLon/2) * Math.sin(dLon/2);
+            const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+            return R * c;
         }
 
-        let html = '';
-        // Kombiniere und sortiere nach Datum (neueste oben)
-        const allItems = [
-            ...fahrten.map(f => ({...f, type: 'fahrt'})),
-            ...belege.map(b => ({...b, type: 'beleg'}))
-        ].sort((a,b) => new Date(b.timestamp) - new Date(a.timestamp));
+        function updateDisplays() {
+            document.getElementById('km-display').innerText = totalDistance.toFixed(2);
+            document.getElementById('eur-display').innerText = (totalDistance * 0.3).toFixed(2) + " €";
+        }
 
-        allItems.slice(0, 10).forEach(item => {
-            const dateStr = new Date(item.timestamp).toLocaleString('de-DE', {day:'2-digit', month:'2-digit', year:'numeric', hour:'2-digit', minute:'2-digit'});
-            if (item.type === 'fahrt') {
-                html += `
-                <div class="list-item">
-                    <div class="item-main">
-                        <span>🚗 ${item.ziel}</span>
-                        <span>+${item.betrag} €</span>
-                    </div>
-                    <div class="item-sub">
-                        ${dateStr} • ${item.km} km (${item.zweck})
-                    </div>
-                </div>`;
+        function toggleTracking() {
+            const zielInput = document.getElementById('ziel');
+            const zweckInput = document.getElementById('zweck');
+
+            if (!isTracking) {
+                // Validierung der Pflichtfelder
+                if (!zielInput.value.trim() || !zweckInput.value.trim()) {
+                    alert("Bitte trage zuerst das Ziel und den Zweck der Fahrt ein!");
+                    return;
+                }
+
+                if (!navigator.geolocation) {
+                    alert("Dein Smartphone unterstützt kein GPS-Tracking im Browser.");
+                    return;
+                }
+
+                isTracking = true;
+                totalDistance = 0;
+                lastPosition = null;
+                updateDisplays();
+
+                document.getElementById('track-btn').innerText = "Fahrt stoppen";
+                document.getElementById('track-btn').className = "btn-stop";
+
+                // Live-Standortüberwachung starten
+                watchId = navigator.geolocation.watchPosition(
+                    (position) => {
+                        const { latitude, longitude, accuracy } = position.coords;
+                        
+                        // Schlechte GPS-Signale ignorieren (Ungenauigkeit > 30 Meter)
+                        if (accuracy > 30) return; 
+
+                        if (lastPosition) {
+                            const diff = calculateDistance(
+                                lastPosition.latitude, lastPosition.longitude,
+                                latitude, longitude
+                            );
+                            // Nur Bewegung werten, die realistisch ist (> 10 Meter)
+                            if (diff > 0.01) {
+                                totalDistance += diff;
+                                updateDisplays();
+                            }
+                        }
+                        lastPosition = { latitude, longitude };
+                    },
+                    (error) => {
+                        console.error(error);
+                        alert("GPS-Fehler: Bitte aktiviere die Ortungsdienste auf deinem Handy.");
+                    },
+                    { enableHighAccuracy: true, maximumAge: 1000, timeout: 10000 }
+                );
+
             } else {
-                html += `
-                <div class="list-item">
-                    <div class="item-main">
-                        <span>📸 Beleg: ${item.haendler}</span>
-                        <span>${item.gesamt} €</span>
-                    </div>
-                    <div class="item-sub">
-                        ${dateStr} • Netto: ${item.netto}€ • <b>MwSt (${item.satz}): ${item.mwst}€</b>
-                    </div>
-                </div>`;
-            }
-        });
-        historyList.innerHTML = html;
-    }
+                // Tracking stoppen
+                isTracking = false;
+                navigator.geolocation.clearWatch(watchId);
 
-    // Tracking Logik
-    btnTracking.addEventListener('click', () => {
-        if (!isTracking) {
-            // Validierung vor Start
-            if (!targetInput.value.trim() || !purposeInput.value.trim()) {
-                alert('Bitte gib zuerst ein Ziel und den Zweck der Fahrt ein!');
+                // Daten speichern
+                const neueFahrt = {
+                    datum: new Date().toLocaleDateString('de-DE'),
+                    ziel: zielInput.value,
+                    zweck: zweckInput.value,
+                    km: totalDistance.toFixed(2),
+                    euro: (totalDistance * 0.3).toFixed(2)
+                };
+
+                fahrtenSpeicher.push(neueFahrt);
+                localStorage.setItem('fahrten', JSON.stringify(fahrtenSpeicher));
+
+                // Inputs zurücksetzen
+                zielInput.value = "";
+                zweckInput.value = "";
+                document.getElementById('track-btn').innerText = "Fahrt starten";
+                document.getElementById('track-btn').className = "btn-start";
+
+                renderLog();
+                alert("Fahrt erfolgreich gespeichert!");
+            }
+        }
+
+        function renderLog() {
+            const list = document.getElementById('fahrten-log');
+            list.innerHTML = "";
+            fahrtenSpeicher.slice().reverse().forEach(f => {
+                const li = document.createElement('li');
+                li.className = "log-item";
+                li.innerHTML = `<span><b>${f.datum}</b> - ${f.ziel} (${f.zweck})</span> <span>${f.km} km (${f.euro} €)</span>`;
+                list.appendChild(li);
+            });
+        }
+
+        function exportFahrten() {
+            if (fahrtenSpeicher.length === 0) {
+                alert("Keine Fahrten zum Exportieren vorhanden.");
                 return;
             }
-            
-            // Start
-            isTracking = true;
-            btnTracking.textContent = 'Fahrt stoppen & speichern';
-            btnTracking.className = 'btn-tracking';
-            currentKm = 0.0;
-
-            // Simuliere GPS-Fortschritt (Echtes Web-GPS könnte via navigator.geolocation.watchPosition eingebunden werden)
-            trackingInterval = setInterval(() => {
-                currentKm += 0.15; // Simuliere Bewegung
-                const eur = currentKm * 0.30;
-                liveKmEl.textContent = currentKm.toFixed(2);
-                liveEurEl.textContent = eur.toFixed(2) + ' €';
-            }, 1000);
-        } else {
-            // Stopp
-            clearInterval(trackingInterval);
-            isTracking = false;
-            btnTracking.textContent = 'Fahrt starten';
-            btnTracking.className = 'btn-primary';
-
-            const finalEur = (currentKm * 0.30).toFixed(2);
-            
-            // Speichern
-            const neueFahrt = {
-                timestamp: new Date().toISOString(),
-                ziel: targetInput.value,
-                zweck: purposeInput.value,
-                km: currentKm.toFixed(2),
-                betrag: finalEur
-            };
-
-            fahrten.push(neueFahrt);
-            localStorage.setItem('team_fahrten', JSON.stringify(fahrten));
-            
-            // Reset Inputs
-            targetInput.value = '';
-            purposeInput.value = '';
-            liveKmEl.textContent = '0.00';
-            liveEurEl.textContent = '0.00 €';
-            
-            updateHistoryUI();
-        }
-    });
-
-    // Beleg Scan Logik
-    const dropZone = document.getElementById('drop-zone');
-    const fileInput = document.getElementById('file-input');
-    const ocrLoading = document.getElementById('ocr-loading');
-    const ocrOutput = document.getElementById('ocr-output');
-    const ocrDetails = document.getElementById('ocr-details');
-
-    dropZone.addEventListener('click', () => fileInput.click());
-    fileInput.addEventListener('change', (e) => {
-        if (e.target.files.length === 0) return;
-        
-        ocrLoading.classList.remove('hidden');
-        ocrOutput.classList.add('hidden');
-
-        // Simuliere KI Server-Anfrage (OCR & Extraktion)
-        setTimeout(() => {
-            ocrLoading.classList.add('hidden');
-            ocrOutput.classList.remove('hidden');
-
-            // Zufällige realistische Demodaten generieren für den Test
-            const haendlerListe = ['Aral Tankstelle', 'Shell', 'MediaMarkt', 'Staples Bürobedarf', 'Deutsche Bahn'];
-            const randomHaendler = haendlerListe[Math.floor(Math.random() * haendlerListe.length)];
-            const gesamt = (Math.random() * 80 + 10).toFixed(2);
-            const satz = "19%";
-            const mwst = (gesamt - (gesamt / 1.19)).toFixed(2);
-            const netto = (gesamt - mwst).toFixed(2);
-
-            ocrDetails.innerHTML = `
-                <b>Händler:</b> ${randomHaendler}<br>
-                <b>Gesamtbetrag:</b> ${gesamt} €<br>
-                <span style="color:#ef4444;"><b>Ausgewiesene MwSt. (${satz}): ${mwst} €</b></span><br>
-                <b>Netto-Betrag:</b> ${netto} €
-            `;
-
-            // In Belegliste speichern
-            belege.push({
-                timestamp: new Date().toISOString(),
-                haendler: randomHaendler,
-                gesamt: gesamt,
-                satz: satz,
-                mwst: mwst,
-                netto: netto
+            let csvContent = "data:text/csv;charset=utf-8,Datum,Ziel,Zweck,Kilometer,Erstattung_EUR\n";
+            fahrtenSpeicher.forEach(f => {
+                csvContent += `"${f.datum}","${f.ziel}","${f.zweck}","${f.km}","${f.euro}"\n`;
             });
-            localStorage.setItem('team_belege', JSON.stringify(belege));
-            updateHistoryUI();
-        }, 2000);
-    });
-
-    // CSV Export Logik
-    window.exportData = function(typ, zeitraum) {
-        const daten = typ === 'fahrten' ? fahrten : belege;
-        if (daten.length === 0) {
-            alert('Keine Daten für den Export vorhanden.');
-            return;
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", `fahrtenbuch_export.csv`);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
         }
 
-        let csvContent = "data:text/csv;charset=utf-8,﻿"; // UTF-8 BOM für Excel
-        
-        if (typ === 'fahrten') {
-            csvContent += "Datum,Ziel,Zweck,Kilometer,Erstattung_EUR
-";
-            daten.forEach(f => {
-                const d = new Date(f.timestamp).toLocaleDateString('de-DE');
-                csvContent += `"${d}","${f.ziel}","${f.zweck}","${f.km}","${f.betrag}"
-`;
-            });
-        } else {
-            csvContent += "Datum,Haendler,Gesamtbetrag_EUR,MwSt_Satz,MwSt_Betrag_EUR,Netto_EUR
-";
-            daten.forEach(b => {
-                const d = new Date(b.timestamp).toLocaleDateString('de-DE');
-                csvContent += `"${d}","${b.haendler}","${b.gesamt}","${b.satz}","${b.mwst}","${b.netto}"
-`;
-            });
-        }
-
-        const encodedUri = encodeURI(csvContent);
-        const link = document.createElement("a");
-        link.setAttribute("href", encodedUri);
-        link.setAttribute("download", `${typ}_export_${zeitraum}_${new Date().toISOString().slice(0,10)}.csv`);
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-    };
-
-    // Initiale Ausführung
-    updateHistoryUI();
-</script>
-
+        // Beim Start gelaufene Fahrten laden
+        renderLog();
+    </script>
 </body>
 </html>
